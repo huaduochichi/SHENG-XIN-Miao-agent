@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>省心喵 - 大学生理财陪伴 AI</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="device-frame" aria-label="省心喵移动端原型">
+        <div class="notch" aria-hidden="true"></div>
+
+        <header class="header">
+          <h1>
+            <img src="/assets/shengxin_miao_logo_1778865585677.png" class="header-logo" alt="省心喵 Logo" />
+            省心喵
+          </h1>
+          <button class="level-pill" id="levelPill" type="button" aria-label="省心喵等级">Lv.1</button>
+        </header>
+
+        <section id="home-screen" class="screen active" aria-label="首页">
+          <article class="home-hero" id="homeMascot" tabindex="0" aria-label="互动省心喵">
+            <div class="hero-copy">
+              <span class="eyebrow">今日总控台</span>
+              <h2>今天想先做什么？</h2>
+              <p id="homeGreeting">设置预算后，我会帮你算今日可花和本周状态。</p>
+            </div>
+            <div class="cat-scene" aria-hidden="true">
+              <div class="cat-3d">
+                <div class="cat-tail"></div>
+                <div class="cat-body"></div>
+                <div class="cat-ear ear-left"></div>
+                <div class="cat-ear ear-right"></div>
+                <div class="cat-head">
+                  <span class="eye eye-left"></span>
+                  <span class="eye eye-right"></span>
+                  <span class="nose"></span>
+                  <span class="mouth"></span>
+                  <span class="whisker whisker-left"></span>
+                  <span class="whisker whisker-right"></span>
+                </div>
+                <div class="cat-paw paw-left"></div>
+                <div class="cat-paw paw-right"></div>
+              </div>
+              <span class="speech-chip" id="mascotSpeech">点我打招呼</span>
+            </div>
+          </article>
+
+          <article class="glass-card home-status empty" id="homeStatusCard">
+            <div class="empty-state" id="budgetEmpty">
+              <strong>还没有设置生活费预算</strong>
+              <p>去「预算」填生活费、固定支出和 buffer，我再同步首页总控台。</p>
+              <button type="button" data-tab="budget">去做预算</button>
+            </div>
+            <div class="home-metrics" id="homeMetrics" hidden>
+              <div>
+                <span>今日建议可花</span>
+                <strong id="todaySpend">--</strong>
+              </div>
+              <div>
+                <span>本周剩余</span>
+                <strong id="weekRemain">--</strong>
+              </div>
+              <div>
+                <span>预算状态</span>
+                <strong id="budgetStatus">未设置</strong>
+              </div>
+              <div class="progress-bar-container" aria-hidden="true">
+                <div class="progress-bar" id="budgetProgress"></div>
+              </div>
+              <p id="budgetSpent">设置预算后展示本周进度</p>
+            </div>
+          </article>
+
+          <article class="glass-card xp-card">
+            <div class="xp-head">
+              <div>
+                <span>省心喵成长值</span>
+                <strong id="xpLabel">0 / 60 XP</strong>
+              </div>
+              <div id="levelBadge">Lv.1</div>
+            </div>
+            <div class="progress-bar-container" aria-hidden="true">
+              <div class="progress-bar xp-progress" id="xpProgress"></div>
+            </div>
+            <p id="xpHint">完成今日待办，小猫会更开心。</p>
+          </article>
+
+          <h2 class="section-title">喵帮手</h2>
+          <div class="action-grid" aria-label="快捷入口">
+            <button class="action-btn" type="button" data-tab="ledger">
+              <span class="action-icon">✎</span>
+              <span class="action-text">记一笔</span>
+            </button>
+            <button class="action-btn" type="button" data-tab="budget">
+              <span class="action-icon green">▥</span>
+              <span class="action-text">做预算</span>
+            </button>
+            <button class="action-btn" type="button" data-tab="goal">
+              <span class="action-icon">◎</span>
+              <span class="action-text">设目标</span>
+            </button>
+            <button class="action-btn" type="button" data-tab="risk">
+              <span class="action-icon red">!</span>
+              <span class="action-text">问风险</span>
+            </button>
+          </div>
+
+          <article class="glass-card home-tasks">
+            <div class="card-title-row">
+              <h2>今日待办</h2>
+            </div>
+            <button type="button" data-tab="ledger" data-task="ledger">
+              <span class="task-check">□</span>
+              <strong>记一笔今天消费</strong>
+            </button>
+            <button type="button" data-tab="goal" data-task="goal">
+              <span class="task-check">□</span>
+              <strong>设置一个攒钱目标</strong>
+            </button>
+            <button type="button" data-tab="risk" data-task="learn" data-instant-prompt="用大学生听得懂的话讲讲什么是年化收益">
+              <span class="task-check">□</span>
+              <strong>学一个财经知识点</strong>
+            </button>
+            <button class="checkin-button" id="checkinButton" type="button" disabled>完成 3 项后可打卡</button>
+          </article>
+        </section>
+
+        <section id="ledger-screen" class="screen feature-screen" aria-label="记账">
+          <div class="screen-scroll">
+            <div class="feature-hero ledger-hero">
+              <div>
+                <span class="zone-icon">✎</span>
+                <h2>记账</h2>
+                <p>自然语言记账 + 消费复盘</p>
+              </div>
+              <img src="/assets/mascot_neutral_1778865603524.png" alt="记账省心喵" />
+            </div>
+
+            <article class="glass-card ledger-summary">
+              <div class="summary-row">
+                <div>
+                  <span>当前周期支出</span>
+                  <strong id="ledgerSpent">¥ 0</strong>
+                </div>
+                <div>
+                  <span>账单笔数</span>
+                  <strong id="ledgerCount">0</strong>
+                </div>
+              </div>
+              <div class="segmented" aria-label="账单周期筛选">
+                <button class="active" type="button" data-period="day">日</button>
+                <button type="button" data-period="week">周</button>
+                <button type="button" data-period="month">月</button>
+                <button type="button" data-period="year">年</button>
+              </div>
+              <div class="mini-chart" id="ledgerChart" aria-label="消费波动柱状图"></div>
+            </article>
+
+            <div class="quick-chip-row category-filter" aria-label="账单分类筛选">
+              <button class="active" type="button" data-category="全部">全部</button>
+              <button type="button" data-category="饮食">饮食</button>
+              <button type="button" data-category="交通">交通</button>
+              <button type="button" data-category="学习">学习</button>
+              <button type="button" data-category="社交娱乐">娱乐</button>
+              <button type="button" data-category="购物">购物</button>
+            </div>
+
+            <article class="glass-card record-list" id="recordList"></article>
+
+            <div class="section-chat" data-chat="ledger">
+              <div class="chat-container" id="ledgerChat" aria-live="polite">
+                <article class="message assistant">
+                  <img src="/assets/shengxin_miao_logo_1778865585677.png" class="msg-avatar" alt="" />
+                  <div class="msg-bubble">发我一句“今天午饭 26，奶茶 18”，我会自动拆账、分类并复盘。</div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <form class="agent-composer" data-intent="ledger" data-chat-target="ledgerChat">
+            <input name="message" autocomplete="off" placeholder="输入账单，例如：今天奶茶18" />
+            <button type="submit">发送</button>
+          </form>
+        </section>
+
+        <section id="budget-screen" class="screen feature-screen" aria-label="预算">
+          <div class="screen-scroll">
+            <div class="feature-hero budget-hero">
+              <div>
+                <span class="zone-icon">▥</span>
+                <h2>预算</h2>
+                <p>生活费拆分 + buffer 规划</p>
+              </div>
+              <img src="/assets/shengxin_miao_logo_1778865585677.png" alt="预算省心喵" />
+            </div>
+
+            <article class="glass-card budget-result-card" id="budgetResultCard" hidden>
+              <div class="result-card-head">
+                <div>
+                  <span>当前预算方案</span>
+                  <h3>还没有生成预算</h3>
+                </div>
+                <button type="button" id="toggleBudgetFormBtn">调整预算</button>
+              </div>
+              <div class="budget-result">
+                <div>
+                  <span>每天建议可花</span>
+                  <strong id="dailyBudgetResult">--</strong>
+                </div>
+                <div>
+                  <span>每周预算</span>
+                  <strong id="weeklyBudgetResult">--</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="glass-card budget-planner" id="budgetFormCard">
+              <div class="input-grid">
+                <label>生活费 <input id="incomeInput" inputmode="decimal" placeholder="例如 2500" /></label>
+                <label>固定支出 <input id="fixedInput" inputmode="decimal" placeholder="例如 120" /></label>
+                <label>想先存 <input id="savingInput" inputmode="decimal" placeholder="例如 500" /></label>
+                <label>周期天数 <input id="daysInput" inputmode="decimal" placeholder="例如 30" /></label>
+                <label>快乐 buffer <input id="happyBufferInput" inputmode="decimal" placeholder="例如 150" /></label>
+                <label>应急 buffer <input id="emergencyBufferInput" inputmode="decimal" placeholder="例如 200" /></label>
+              </div>
+              <button class="primary-action" type="button" id="generateBudgetBtn">让省心喵生成预算</button>
+              <div class="budget-result">
+                <div>
+                  <span>每天建议可花</span>
+                  <strong id="dailyBudget">--</strong>
+                </div>
+                <div>
+                  <span>每周预算</span>
+                  <strong id="weeklyBudget">--</strong>
+                </div>
+              </div>
+            </article>
+
+            <article class="glass-card budget-bars" id="budgetBars">
+              <h3>分类预算</h3>
+              <p class="empty-copy">生成预算后，我会把饮食、交通、学习、娱乐和弹性支出拆出来。</p>
+            </article>
+
+            <div class="section-chat" data-chat="budget">
+              <div class="chat-container" id="budgetChat" aria-live="polite">
+                <article class="message assistant">
+                  <img src="/assets/shengxin_miao_logo_1778865585677.png" class="msg-avatar" alt="" />
+                  <div class="msg-bubble">填好生活费和 buffer，点“生成预算”；也可以直接问我怎么调预算。</div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <form class="agent-composer" data-intent="budget" data-chat-target="budgetChat">
+            <input name="message" autocomplete="off" placeholder="输入预算问题，例如：聚餐多怎么调" />
+            <button type="submit">发送</button>
+          </form>
+        </section>
+
+        <section id="goal-screen" class="screen feature-screen" aria-label="目标">
+          <div class="screen-scroll">
+            <div class="feature-hero goal-hero">
+              <div>
+                <span class="zone-icon">◎</span>
+                <h2>目标</h2>
+                <p>攒钱计划 + 打卡陪伴</p>
+              </div>
+              <img src="/assets/mascot_happy_1778865617582.png" alt="目标省心喵" />
+            </div>
+
+            <article class="glass-card goal-card" id="goalPlanCard" hidden>
+              <div class="empty-state compact">
+                <strong>还没有目标计划</strong>
+                <p>填好目标后，我会生成每日/每周攒钱额、阶段里程碑和打卡任务。</p>
+              </div>
+            </article>
+
+            <article class="glass-card goal-form" id="goalFormCard">
+              <div class="result-card-head compact-head">
+                <h3>今天想攒钱做什么？</h3>
+                <button type="button" id="toggleGoalFormBtn" hidden>调整目标</button>
+              </div>
+              <div class="input-grid">
+                <label>目标用途 <input id="goalUseInput" placeholder="例如 买微单相机" /></label>
+                <label>目标金额 <input id="goalTargetInput" inputmode="decimal" placeholder="例如 3000" /></label>
+                <label>当前已攒 <input id="goalCurrentInput" inputmode="decimal" placeholder="例如 600" /></label>
+                <label>周期 <input id="goalDeadlineInput" placeholder="例如 3个月 / 暑假前" /></label>
+              </div>
+              <button class="primary-action" type="button" id="generateGoalBtn">生成攒钱计划</button>
+            </article>
+
+            <article class="glass-card milestone-card" id="milestoneCard" hidden>
+              <h3>阶段里程碑</h3>
+              <div class="milestones" id="milestones"></div>
+            </article>
+
+            <div class="section-chat" data-chat="goal">
+              <div class="chat-container" id="goalChat" aria-live="polite">
+                <article class="message assistant">
+                  <img src="/assets/shengxin_miao_logo_1778865585677.png" class="msg-avatar" alt="" />
+                  <div class="msg-bubble">告诉我你要攒多少钱、用来做什么、什么时候要，我会拆成每天和每周计划。</div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <form class="agent-composer" data-intent="goal" data-chat-target="goalChat">
+            <input name="message" autocomplete="off" placeholder="输入目标问题，例如：这周没攒够怎么办" />
+            <button type="submit">发送</button>
+          </form>
+        </section>
+
+        <section id="risk-screen" class="screen feature-screen" aria-label="风险">
+          <div class="screen-scroll">
+            <div class="feature-hero risk-hero">
+              <div>
+                <span class="zone-icon">!</span>
+                <h2>风险</h2>
+                <p>避坑判断 + 财经学习</p>
+              </div>
+              <img src="/assets/mascot_worried_1778865632425.png" alt="风险省心喵" />
+            </div>
+
+            <article class="glass-card risk-card" id="riskDetector">
+              <h3>避坑扫描器</h3>
+              <p>把产品介绍、收益承诺或朋友推荐的话发给我，我会标出风险等级、命中的话术和你该追问的问题。</p>
+              <div class="risk-placeholder">等待输入</div>
+            </article>
+
+            <h2 class="section-title">一点即学</h2>
+            <div class="learn-grid">
+              <button type="button" data-learn="用大学生能听懂的话解释什么是年化收益">年化收益</button>
+              <button type="button" data-learn="给我讲讲保本高收益为什么危险">保本陷阱</button>
+              <button type="button" data-learn="基金是什么，大学生应该怎么理解风险">基金入门</button>
+              <button type="button" data-learn="校园贷有哪些风险，怎么识别">校园贷风险</button>
+            </div>
+
+            <div class="section-chat" data-chat="risk">
+              <div class="chat-container" id="riskChat" aria-live="polite">
+                <article class="message assistant">
+                  <img src="/assets/shengxin_miao_logo_1778865585677.png" class="msg-avatar" alt="" />
+                  <div class="msg-bubble">点上面的知识卡可以直接学习；也可以把理财产品描述发给我做风险扫描。</div>
+                </article>
+              </div>
+            </div>
+          </div>
+          <form class="agent-composer" data-intent="risk" data-chat-target="riskChat">
+            <input name="message" autocomplete="off" placeholder="输入风险问题，例如：月收益8%保本能买吗" />
+            <button type="submit">发送</button>
+          </form>
+        </section>
+
+        <nav class="bottom-nav" aria-label="底部导航">
+          <button class="nav-item active" type="button" data-nav="home"><span class="nav-icon">⌂</span><span>首页</span></button>
+          <button class="nav-item" type="button" data-nav="ledger"><span class="nav-icon">✎</span><span>记账</span></button>
+          <button class="nav-item" type="button" data-nav="budget"><span class="nav-icon">▥</span><span>预算</span></button>
+          <button class="nav-item" type="button" data-nav="goal"><span class="nav-icon">◎</span><span>目标</span></button>
+          <button class="nav-item" type="button" data-nav="risk"><span class="nav-icon">!</span><span>风险</span></button>
+        </nav>
+      </section>
+
+    </main>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
