@@ -68,7 +68,7 @@ const HIGH_RISK_PATTERNS = [
   /(翻倍|暴富|月化|月收益|日收益)/
 ];
 
-const server = http.createServer(async (req, res) => {
+async function requestHandler(req, res) {
   try {
     if (req.method === "POST" && req.url === "/api/chat") {
       const body = await readJson(req);
@@ -95,11 +95,17 @@ const server = http.createServer(async (req, res) => {
       message: error instanceof Error ? error.message : "Unknown error"
     });
   }
-});
+}
 
-server.listen(PORT, HOST, () => {
-  console.log(`省心喵 H5 demo running at http://${HOST}:${PORT}`);
-});
+const server = http.createServer(requestHandler);
+
+if (!process.env.VERCEL) {
+  server.listen(PORT, HOST, () => {
+    console.log(`省心喵 H5 demo running at http://${HOST}:${PORT}`);
+  });
+}
+
+export default requestHandler;
 
 async function handleChat(body) {
   const message = String(body?.message || "").trim();
